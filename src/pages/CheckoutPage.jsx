@@ -297,7 +297,7 @@ function CheckoutForm() {
 
                 {/* Test card hint */}
                 <div className="p-3 bg-accent/10 border border-accent/20 rounded-lg mb-5">
-                  <p className="font-mono text-[10px] text-accent tracking-wider uppercase mb-1">@Iindigo.graphic ·</p>
+                  <p className="font-mono text-[10px] text-accent tracking-wider uppercase mb-1">@Iindigo.graphic · </p>
                   <p className="font-mono text-xs text-gray-400">Secure checkout powered by Stripe</p>
                 </div>
 

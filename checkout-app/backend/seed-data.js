@@ -1,0 +1,32 @@
+module.exports = [
+  {
+    name: 'Porsche 911 Botanical Tee',
+    description: 'White oversized tee featuring a hand-drawn Porsche 911 line art composition with botanical elements. Small chest logo on the front, full back print. 100% premium cotton.',
+    price: 40,
+    category: 'clothing',
+    stock: 999,
+    rating: 5,
+    numReviews: 0,
+    image: 'https://i.imgur.com/DeLeoYD.png',
+  },
+  {
+    name: 'Jasmin Botanical Tee',
+    description: 'Sand coloured oversized tee with a detailed cherry blossom botanical illustration. Small floral chest logo on the front, full back print framed in a classic border. 100% premium cotton.',
+    price: 40,
+    category: 'clothing',
+    stock: 999,
+    rating: 5,
+    numReviews: 0,
+    image: 'https://i.imgur.com/9ayxPyw.png',
+  },
+  {
+    name: 'Audi S7 · ZURE Tee',
+    description: 'Black oversized tee with a bold Audi S7 graphic print and red S7 badge on the back. ZURE chest logo on the front. Built for those who choose elegance over noise. 100% premium cotton.',
+    price: 40,
+    category: 'clothing',
+    stock: 999,
+    rating: 5,
+    numReviews: 0,
+    image: 'https://i.imgur.com/vnp1e3b.png',
+  },
+];

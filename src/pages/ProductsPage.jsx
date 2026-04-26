@@ -107,13 +107,12 @@ function ProductCard({ product, onAdd, style }) {
       style={style}
     >
       {/* Image */}
-      <div className="aspect-square overflow-hidden bg-[#1a1a1a] relative">
+      <divclass Name="aspect-video overflow-hidden bg-[#1a1a1a] relative">
         {product.image ? (
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
+           className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 p-2"
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-700">
             <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">

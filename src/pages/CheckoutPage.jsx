@@ -17,7 +17,6 @@ import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 
-// Load Stripe outside component to avoid re-initialization
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 export default function CheckoutPage() {
@@ -51,7 +50,6 @@ export default function CheckoutPage() {
   );
 }
 
-// ─── Inner form (needs Stripe hooks inside Elements) ──────
 function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
@@ -59,7 +57,7 @@ function CheckoutForm() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [step, setStep] = useState(1); // 1=billing, 2=shipping, 3=payment
+  const [step, setStep] = useState(1);
   const [processing, setProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState('');
   const [paymentIntentId, setPaymentIntentId] = useState('');
@@ -85,7 +83,6 @@ function CheckoutForm() {
   const [shippingErrors, setShippingErrors] = useState({});
   const [cardError, setCardError] = useState('');
 
-  // Fetch PaymentIntent when component mounts
   useEffect(() => {
     const fetchIntent = async () => {
       try {
@@ -101,7 +98,6 @@ function CheckoutForm() {
     fetchIntent();
   }, []);
 
-  // ─── Validation ────────────────────────────────────────
   const validateBilling = () => {
     const e = {};
     if (!billing.fullName) e.fullName = 'Full name is required';
@@ -138,7 +134,6 @@ function CheckoutForm() {
     setStep(3);
   };
 
-  // ─── Submit payment ────────────────────────────────────
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements || !clientSecret) return;
@@ -147,7 +142,6 @@ function CheckoutForm() {
     setCardError('');
 
     try {
-      // 1. Confirm card payment with Stripe
       const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: elements.getElement(CardElement),
@@ -177,7 +171,6 @@ function CheckoutForm() {
         return;
       }
 
-      // 2. Create order in our database
       const shippingAddr = sameAsBilling
         ? { fullName: billing.fullName, address: billing.address, city: billing.city, postalCode: billing.postalCode, country: billing.country }
         : shipping;
@@ -189,7 +182,6 @@ function CheckoutForm() {
         stripePaymentIntentId: paymentIntentId,
       });
 
-      // 3. Clear cart and redirect to success
       clearCart();
       toast.success('Payment successful! 🎉');
       navigate(`/orders/${data.order._id}`, { state: { newOrder: true } });
@@ -217,7 +209,6 @@ function CheckoutForm() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="font-display text-5xl tracking-wider text-white mb-8">CHECKOUT</h1>
 
-        {/* Step indicator */}
         <div className="flex items-center gap-4 mb-10">
           {[['1', 'Billing'], ['2', 'Shipping'], ['3', 'Payment']].map(([num, label], i) => (
             <React.Fragment key={num}>
@@ -237,10 +228,8 @@ function CheckoutForm() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left: forms */}
           <div className="lg:col-span-2">
 
-            {/* ── STEP 1: BILLING ── */}
             <StepCard title="Billing Details" step={1} currentStep={step} onEdit={() => setStep(1)}>
               <AddressForm
                 data={billing}
@@ -254,7 +243,6 @@ function CheckoutForm() {
               </div>
             </StepCard>
 
-            {/* ── STEP 2: SHIPPING ── */}
             <StepCard title="Shipping Address" step={2} currentStep={step} onEdit={() => setStep(2)}>
               <label className="flex items-center gap-3 mb-5 cursor-pointer group">
                 <div
@@ -280,7 +268,6 @@ function CheckoutForm() {
               </div>
             </StepCard>
 
-            {/* ── STEP 3: PAYMENT ── */}
             <StepCard title="Payment" step={3} currentStep={step} onEdit={() => setStep(3)}>
               <form onSubmit={handleSubmit}>
                 <div className="mb-5">
@@ -295,9 +282,8 @@ function CheckoutForm() {
                   )}
                 </div>
 
-                {/* Test card hint */}
                 <div className="p-3 bg-accent/10 border border-accent/20 rounded-lg mb-5">
-                  <p className="font-mono text-[10px] text-accent tracking-wider uppercase mb-1">@Iindigo.graphic · </p>
+                  <p className="font-mono text-[10px] text-accent tracking-wider uppercase mb-1">@IIndigo.graphic</p>
                   <p className="font-mono text-xs text-gray-400">Secure checkout powered by Stripe</p>
                 </div>
 
@@ -322,7 +308,6 @@ function CheckoutForm() {
             </StepCard>
           </div>
 
-          {/* Right: Order summary */}
           <div className="lg:col-span-1">
             <div className="card sticky top-24">
               <h2 className="font-display text-xl tracking-wider text-white mb-4">ORDER SUMMARY</h2>
@@ -372,7 +357,6 @@ function CheckoutForm() {
   );
 }
 
-// ─── Step card wrapper ─────────────────────────────────────
 function StepCard({ title, step, currentStep, onEdit, children }) {
   const isActive = currentStep === step;
   const isComplete = currentStep > step;
@@ -393,13 +377,14 @@ function StepCard({ title, step, currentStep, onEdit, children }) {
   );
 }
 
-// ─── Reusable address form ─────────────────────────────────
-function AddressForm({ data, onChange, errors, showEmail = false, showPhone = false }) {
-  const Field = ({ label, name, type = 'text', placeholder, half }) => (
-    <div className={half ? '' : 'col-span-2 sm:col-span-1'}>
+// ─── Field component defined OUTSIDE AddressForm to prevent remount on keystroke ───
+function Field({ label, name, type = 'text', placeholder, data, onChange, errors }) {
+  return (
+    <div>
       <label className="block font-mono text-xs tracking-widest uppercase text-gray-400 mb-1.5">{label}</label>
       <input
         type={type}
+        name={name}
         value={data[name] || ''}
         onChange={(e) => onChange(name, e.target.value)}
         placeholder={placeholder}
@@ -408,15 +393,27 @@ function AddressForm({ data, onChange, errors, showEmail = false, showPhone = fa
       {errors[name] && <p className="mt-1 text-red-400 text-xs font-mono">{errors[name]}</p>}
     </div>
   );
+}
 
+function AddressForm({ data, onChange, errors, showEmail = false, showPhone = false }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="col-span-1 sm:col-span-2"><Field label="Full Name" name="fullName" placeholder="John Doe" /></div>
-      {showEmail && <div className="col-span-1 sm:col-span-2"><Field label="Email" name="email" type="email" placeholder="you@example.com" /></div>}
-      {showPhone && <Field label="Phone (optional)" name="phone" type="tel" placeholder="+1 555 000 0000" />}
-      <div className="col-span-1 sm:col-span-2"><Field label="Street Address" name="address" placeholder="123 Main St, Apt 4B" /></div>
-      <Field label="City" name="city" placeholder="New York" />
-      <Field label="Postal Code" name="postalCode" placeholder="10001" />
+      <div className="col-span-1 sm:col-span-2">
+        <Field label="Full Name" name="fullName" placeholder="John Doe" data={data} onChange={onChange} errors={errors} />
+      </div>
+      {showEmail && (
+        <div className="col-span-1 sm:col-span-2">
+          <Field label="Email" name="email" type="email" placeholder="you@example.com" data={data} onChange={onChange} errors={errors} />
+        </div>
+      )}
+      {showPhone && (
+        <Field label="Phone (optional)" name="phone" type="tel" placeholder="+1 555 000 0000" data={data} onChange={onChange} errors={errors} />
+      )}
+      <div className="col-span-1 sm:col-span-2">
+        <Field label="Street Address" name="address" placeholder="123 Main St, Apt 4B" data={data} onChange={onChange} errors={errors} />
+      </div>
+      <Field label="City" name="city" placeholder="New York" data={data} onChange={onChange} errors={errors} />
+      <Field label="Postal Code" name="postalCode" placeholder="10001" data={data} onChange={onChange} errors={errors} />
       <div className="col-span-1 sm:col-span-2">
         <label className="block font-mono text-xs tracking-widest uppercase text-gray-400 mb-1.5">Country</label>
         <select

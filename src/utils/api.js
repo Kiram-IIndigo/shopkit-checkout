@@ -6,7 +6,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "/api", // proxied to http://localhost:5000 in dev
+  baseURL: process.env.REACT_APP_API_URL || 'https://iindigo-graphic.onrender.com/api', // proxied to http://localhost:5000 in dev
   headers: { "Content-Type": "application/json" },
 });
 

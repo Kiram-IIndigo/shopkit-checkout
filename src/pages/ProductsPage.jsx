@@ -14,7 +14,7 @@ export default function ProductsPage() {
   const [filter, setFilter] = useState('all');
   const { addItem } = useCart();
 
-  const categories = ['all', 'clothing', 'accessories', 'footwear', 'lifestyle'];
+  const categories = ['all', 'clothing'];
 
   useEffect(() => {
     const fetchProducts = async () => {

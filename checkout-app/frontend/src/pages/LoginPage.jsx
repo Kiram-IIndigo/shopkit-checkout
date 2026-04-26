@@ -57,7 +57,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen pt-20 flex items-center justify-center px-4 relative overflow-hidden">
       {/* Background text */}
-      <div className="absolute bottom-0 right-0 font-display text-[20rem] text-white/3 leading-none pointer-events-none select-none">
+      <div className="absolute bottom-0 opacity-10 right-0 font-display text-[20rem] text-white/3 leading-none pointer-events-none select-none">
         LOGIN
       </div>
 

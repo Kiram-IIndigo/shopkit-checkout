@@ -47,6 +47,18 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
 
 // ─── Global error handler ─────────────────────────────────
+// ─── Temporary seed route ─────────────────────────────────
+app.get('/api/seed', async (req, res) => {
+  try {
+    const Product = require('./models/Product');
+    const seedData = require('./seed-data');
+    await Product.deleteMany({});
+    await Product.insertMany(seedData);
+    res.json({ success: true, message: `Seeded ${seedData.length} products` });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
 
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err.message);

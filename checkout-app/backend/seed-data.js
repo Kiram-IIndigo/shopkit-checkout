@@ -7,7 +7,7 @@ module.exports = [
     stock: 999,
     rating: 5,
     numReviews: 0,
-    image: 'https://i.imgur.com/DeLeoYD.png',
+    image: 'https://i.imgur.com/vnp1e3b.png',
   },
   {
     name: 'Jasmin Botanical Tee',
@@ -27,6 +27,6 @@ module.exports = [
     stock: 999,
     rating: 5,
     numReviews: 0,
-    image: 'https://i.imgur.com/vnp1e3b.png',
+    image: 'https://i.imgur.com/DeLeoYD.png',
   },
 ];

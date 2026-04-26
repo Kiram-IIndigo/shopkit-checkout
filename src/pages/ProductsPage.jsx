@@ -77,7 +77,6 @@ export default function ProductsPage() {
         )}
       </div>
 
-      {/* Product Preview Modal */}
       {selectedProduct && (
         <ProductModal
           product={selectedProduct}
@@ -132,7 +131,6 @@ function ProductCard({ product, onAdd, onPreview, style }) {
             {product.category}
           </span>
         </div>
-        {/* Quick view overlay */}
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <span className="font-mono text-xs tracking-widest uppercase text-white bg-black/60 px-4 py-2 rounded-lg backdrop-blur-sm">
             Quick View
@@ -144,14 +142,9 @@ function ProductCard({ product, onAdd, onPreview, style }) {
         <h3 className="font-display text-xl tracking-wider text-white mb-1">{product.name}</h3>
         <p className="text-gray-500 text-xs leading-relaxed mb-3 line-clamp-2">{product.description}</p>
         <div className="flex items-center justify-between">
-          <span className="font-display text-2xl tracking-wider text-white">${product.price.toFixed(2)}</span>
+          <span className="font-display text-2xl tracking-wider text-white">{product.price.toFixed(2)} BAM</span>
           <div className="flex gap-2">
-            <button
-              onClick={onPreview}
-              className="btn-ghost py-2 px-3 text-xs"
-            >
-              View
-            </button>
+            <button onClick={onPreview} className="btn-ghost py-2 px-3 text-xs">View</button>
             <button
               onClick={handleAdd}
               disabled={product.stock === 0 || adding}
@@ -171,14 +164,12 @@ function ProductModal({ product, onClose, onAdd }) {
   const [selectedSize, setSelectedSize] = useState(null);
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
-  // Close on Escape key
   useEffect(() => {
     const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
-  // Prevent body scroll
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
@@ -187,10 +178,7 @@ function ProductModal({ product, onClose, onAdd }) {
   const handleAdd = () => {
     setAdding(true);
     onAdd(product, 1);
-    setTimeout(() => {
-      setAdding(false);
-      onClose();
-    }, 800);
+    setTimeout(() => { setAdding(false); onClose(); }, 800);
   };
 
   return (
@@ -199,7 +187,6 @@ function ProductModal({ product, onClose, onAdd }) {
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div className="bg-[#141414] border border-white/10 rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto animate-fade-up">
-        {/* Close button */}
         <div className="flex justify-end p-4 pb-0">
           <button
             onClick={onClose}
@@ -210,30 +197,23 @@ function ProductModal({ product, onClose, onAdd }) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 pt-2">
-          {/* Image */}
           <div className="bg-[#1a1a1a] rounded-xl overflow-hidden" style={{ aspectRatio: '1' }}>
             {product.image ? (
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-contain p-4"
-              />
+              <img src={product.image} alt={product.name} className="w-full h-full object-contain p-4" />
             ) : (
               <div className="w-full h-full bg-[#222]" />
             )}
           </div>
 
-          {/* Details */}
           <div className="flex flex-col gap-4">
             <div>
               <span className="font-mono text-[10px] tracking-widest uppercase text-accent">{product.category}</span>
               <h2 className="font-display text-3xl tracking-wider text-white mt-1">{product.name}</h2>
-              <p className="font-display text-3xl text-accent mt-2">${product.price.toFixed(2)}</p>
+              <p className="font-display text-3xl text-accent mt-2">{product.price.toFixed(2)} BAM</p>
             </div>
 
             <p className="text-gray-400 text-sm leading-relaxed">{product.description}</p>
 
-            {/* Size selector */}
             <div>
               <p className="font-mono text-xs tracking-widest uppercase text-gray-400 mb-2">
                 Select Size {selectedSize && <span className="text-accent">— {selectedSize}</span>}
@@ -255,7 +235,6 @@ function ProductModal({ product, onClose, onAdd }) {
               </div>
             </div>
 
-            {/* Add to cart */}
             <button
               onClick={handleAdd}
               disabled={product.stock === 0 || adding}
@@ -265,7 +244,7 @@ function ProductModal({ product, onClose, onAdd }) {
             </button>
 
             <p className="font-mono text-[10px] text-gray-600 text-center tracking-wider">
-              FREE SHIPPING OVER $50 · MADE ON DEMAND
+              FREE SHIPPING OVER 200 BAM · MADE ON DEMAND
             </p>
           </div>
         </div>

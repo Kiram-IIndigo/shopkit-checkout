@@ -51,6 +51,7 @@ export default function CartPage() {
                   value={shippingCost === 0 ? 'Free' : `${shippingCost.toFixed(2)} BAM`}
                   valueClass={shippingCost === 0 ? 'text-green-400' : ''}
                 />
+                <SummaryRow label="Tax (10%)" value={`${tax.toFixed(2)} BAM`} />
                 <div className="border-t border-white/8 pt-3">
                   <SummaryRow label="Total" value={`${total.toFixed(2)} BAM`} bold />
                 </div>
@@ -58,7 +59,7 @@ export default function CartPage() {
 
               {shippingCost > 0 && (
                 <p className="font-mono text-xs text-gray-500 mb-4">
-                  Add {(200 - subtotal).toFixed(2)} BAM more for free shipping
+                  Add {(50 - subtotal).toFixed(2)} BAM more for free shipping
                 </p>
               )}
 
@@ -102,4 +103,39 @@ function CartItem({ item, onRemove, onUpdateQty }) {
         </div>
 
         <div className="flex items-center justify-between mt-3">
-          <div className=
+          <div className="flex items-center gap-0 bg-[#1a1a1a] border border-white/10 rounded-lg overflow-hidden">
+            <button
+              onClick={() => onUpdateQty(item._id, item.quantity - 1)}
+              disabled={item.quantity <= 1}
+              className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 disabled:opacity-30 transition-colors text-lg"
+            >−</button>
+            <span className="w-8 text-center font-mono text-sm border-x border-white/10 h-8 flex items-center justify-center">
+              {item.quantity}
+            </span>
+            <button
+              onClick={() => onUpdateQty(item._id, item.quantity + 1)}
+              disabled={item.quantity >= item.stock}
+              className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 disabled:opacity-30 transition-colors text-lg"
+            >+</button>
+          </div>
+          <span className="font-display text-xl tracking-wider text-white">
+            {(item.price * item.quantity).toFixed(2)} BAM
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SummaryRow({ label, value, bold, valueClass = '' }) {
+  return (
+    <div className="flex justify-between items-center">
+      <span className={`font-mono text-xs tracking-wider uppercase ${bold ? 'text-white' : 'text-gray-400'}`}>
+        {label}
+      </span>
+      <span className={`font-display tracking-wider ${bold ? 'text-2xl text-white' : `text-base text-gray-300 ${valueClass}`}`}>
+        {value}
+      </span>
+    </div>
+  );
+}

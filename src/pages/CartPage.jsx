@@ -51,7 +51,7 @@ export default function CartPage() {
                   value={shippingCost === 0 ? 'Free' : `${shippingCost.toFixed(2)} BAM`}
                   valueClass={shippingCost === 0 ? 'text-green-400' : ''}
                 />
-                <SummaryRow label="Tax (10%)" value={{tax.toFixed(2)} BAM} />
+                <SummaryRow label="Tax (10%)" value={'{tax.toFixed(2)} BAM'} />
                 <div className="border-t border-white/8 pt-3">
                   <SummaryRow label="Total" value={`${total.toFixed(2)} BAM`} bold />
                 </div>

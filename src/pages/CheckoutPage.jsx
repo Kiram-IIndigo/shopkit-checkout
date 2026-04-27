@@ -48,7 +48,7 @@ export default function CheckoutPage() {
 function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
-  const { items, subtotal, shippingCost, tax, total, clearCart } = useCart();
+  const { items, subtotal, shippingCost, total, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -324,9 +324,6 @@ function CheckoutForm() {
                 <div className="flex justify-between font-mono text-xs text-gray-500">
                   <span>Shipping</span>
                   <span className={shippingCost === 0 ? 'text-green-400' : ''}>{shippingCost === 0 ? 'FREE' : `${shippingCost.toFixed(2)} BAM`}</span>
-                </div>
-                <div className="flex justify-between font-mono text-xs text-gray-500">
-                  <span>Tax (10%)</span><span>{tax.toFixed(2)} BAM</span>
                 </div>
                 <div className="flex justify-between font-mono text-lg text-white border-t border-white/8 pt-2 mt-1">
                   <span className="text-xs uppercase tracking-wider">Total</span>

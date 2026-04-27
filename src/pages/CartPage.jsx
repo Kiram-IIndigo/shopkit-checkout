@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
 export default function CartPage() {
-  const { items, itemCount, subtotal, shippingCost, tax, total, removeItem, updateQuantity } = useCart();
+  const { items, itemCount, subtotal, shippingCost, total, removeItem, updateQuantity } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -50,8 +50,7 @@ export default function CartPage() {
                   label="Shipping"
                   value={shippingCost === 0 ? 'Free' : `${shippingCost.toFixed(2)} BAM`}
                   valueClass={shippingCost === 0 ? 'text-green-400' : ''}
-                />
-                <SummaryRow label="Tax (10%)" value={`${tax.toFixed(2)} BAM`} />
+                /
                 <div className="border-t border-white/8 pt-3">
                   <SummaryRow label="Total" value={`${total.toFixed(2)} BAM`} bold />
                 </div>

@@ -45,14 +45,14 @@ export default function CartPage() {
             <div className="card sticky top-24">
               <h2 className="font-display text-2xl tracking-wider text-white mb-6">ORDER SUMMARY</h2>
               <div className="flex flex-col gap-3 mb-6">
-                <SummaryRow label="Subtotal" value={`{subtotal.toFixed(2)} BAM`} />
+                <SummaryRow label="Subtotal" value={`${subtotal.toFixed(2)} BAM`} />
                 <SummaryRow
                   label="Shipping"
-                  value={shippingCost === 0 ? 'Free' : `{shippingCost.toFixed(2)} BAM`}
+                  value={shippingCost === 0 ? 'Free' : `${shippingCost.toFixed(2)} BAM`}
                   valueClass={shippingCost === 0 ? 'text-green-400' : ''}
                 />
                 <div className="border-t border-white/8 pt-3">
-                  <SummaryRow label="Total" value={`{total.toFixed(2)} BAM`} bold />
+                  <SummaryRow label="Total" value={`${total.toFixed(2)} BAM`} bold />
                 </div>
               </div>
 

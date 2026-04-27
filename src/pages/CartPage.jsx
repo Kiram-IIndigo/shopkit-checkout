@@ -37,20 +37,28 @@ export default function CartPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 flex flex-col gap-4">
             {items.map((item) => (
-              <CartItem key={item._id} item={item} onRemove={removeItem} onUpdateQty={updateQuantity} />
+              <CartItem
+                key={item._id}
+                item={item}
+                onRemove={removeItem}
+                onUpdateQty={updateQuantity}
+              />
             ))}
           </div>
 
           <div className="lg:col-span-1">
             <div className="card sticky top-24">
               <h2 className="font-display text-2xl tracking-wider text-white mb-6">ORDER SUMMARY</h2>
+
               <div className="flex flex-col gap-3 mb-6">
                 <SummaryRow label="Subtotal" value={`${subtotal.toFixed(2)} BAM`} />
+
                 <SummaryRow
                   label="Shipping"
                   value={shippingCost === 0 ? 'Free' : `${shippingCost.toFixed(2)} BAM`}
                   valueClass={shippingCost === 0 ? 'text-green-400' : ''}
-                /
+                />
+
                 <div className="border-t border-white/8 pt-3">
                   <SummaryRow label="Total" value={`${total.toFixed(2)} BAM`} bold />
                 </div>
@@ -58,7 +66,7 @@ export default function CartPage() {
 
               {shippingCost > 0 && (
                 <p className="font-mono text-xs text-gray-500 mb-4">
-                  Add {(50 - subtotal).toFixed(2)} BAM more for free shipping
+                  Add {(200 - subtotal).toFixed(2)} BAM more for free shipping
                 </p>
               )}
 
@@ -66,7 +74,10 @@ export default function CartPage() {
                 {isAuthenticated ? 'Proceed to Checkout →' : 'Login to Checkout →'}
               </button>
 
-              <Link to="/products" className="block text-center font-mono text-xs text-gray-500 hover:text-gray-300 mt-4 transition-colors">
+              <Link
+                to="/products"
+                className="block text-center font-mono text-xs text-gray-500 hover:text-gray-300 mt-4 transition-colors"
+              >
                 ← Continue Shopping
               </Link>
             </div>
@@ -91,10 +102,18 @@ function CartItem({ item, onRemove, onUpdateQty }) {
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-start gap-2">
           <div>
-            <span className="font-mono text-[10px] tracking-widest uppercase text-accent">{item.category}</span>
-            <h3 className="font-display text-lg tracking-wider text-white leading-tight">{item.name}</h3>
+            <span className="font-mono text-[10px] tracking-widest uppercase text-accent">
+              {item.category}
+            </span>
+            <h3 className="font-display text-lg tracking-wider text-white leading-tight">
+              {item.name}
+            </h3>
           </div>
-          <button onClick={() => onRemove(item._id)} className="text-gray-600 hover:text-red-400 transition-colors flex-shrink-0">
+
+          <button
+            onClick={() => onRemove(item._id)}
+            className="text-gray-600 hover:text-red-400 transition-colors flex-shrink-0"
+          >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -107,16 +126,23 @@ function CartItem({ item, onRemove, onUpdateQty }) {
               onClick={() => onUpdateQty(item._id, item.quantity - 1)}
               disabled={item.quantity <= 1}
               className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 disabled:opacity-30 transition-colors text-lg"
-            >−</button>
+            >
+              −
+            </button>
+
             <span className="w-8 text-center font-mono text-sm border-x border-white/10 h-8 flex items-center justify-center">
               {item.quantity}
             </span>
+
             <button
               onClick={() => onUpdateQty(item._id, item.quantity + 1)}
               disabled={item.quantity >= item.stock}
               className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 disabled:opacity-30 transition-colors text-lg"
-            >+</button>
+            >
+              +
+            </button>
           </div>
+
           <span className="font-display text-xl tracking-wider text-white">
             {(item.price * item.quantity).toFixed(2)} BAM
           </span>
@@ -129,10 +155,21 @@ function CartItem({ item, onRemove, onUpdateQty }) {
 function SummaryRow({ label, value, bold, valueClass = '' }) {
   return (
     <div className="flex justify-between items-center">
-      <span className={`font-mono text-xs tracking-wider uppercase ${bold ? 'text-white' : 'text-gray-400'}`}>
+      <span
+        className={`font-mono text-xs tracking-wider uppercase ${
+          bold ? 'text-white' : 'text-gray-400'
+        }`}
+      >
         {label}
       </span>
-      <span className={`font-display tracking-wider ${bold ? 'text-2xl text-white' : `text-base text-gray-300 ${valueClass}`}`}>
+
+      <span
+        className={`font-display tracking-wider ${
+          bold
+            ? 'text-2xl text-white'
+            : `text-base text-gray-300 ${valueClass}`
+        }`}
+      >
         {value}
       </span>
     </div>
